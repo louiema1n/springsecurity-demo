@@ -6,6 +6,7 @@
 </head>
 <body>
 <h1>欢迎使用Spring Security!</h1>
+<h4>当前登录用户：<label th:text="${name}"></label></h4>
 <form th:action="@{/logout}" method="post">
     <input type="submit" value="退出登录"/>
 </form>
