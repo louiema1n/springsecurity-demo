@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -38,6 +39,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .roles("normal");
         // 基于数据库的用户认证/鉴权
         auth.userDetailsService(customUserDetailService).passwordEncoder(newPasswordEncoder());
+    }
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+                .antMatchers("/login").permitAll()  // 所有人可访问login页面
+                .anyRequest().authenticated()   // 登录后可访问任何请求
+                .and()
+                .formLogin().loginPage("/login");   // 自定义login页面
     }
 
     /**
