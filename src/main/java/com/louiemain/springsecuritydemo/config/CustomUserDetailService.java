@@ -1,5 +1,6 @@
 package com.louiemain.springsecuritydemo.config;
 
+import com.louiemain.springsecuritydemo.domain.Role;
 import com.louiemain.springsecuritydemo.domain.UserInfo;
 import com.louiemain.springsecuritydemo.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +40,9 @@ public class CustomUserDetailService implements UserDetailsService {
         // 定义权限列表
         List<GrantedAuthority> authorities = new ArrayList<>();
         // 添加用户权限
-        authorities.add(new SimpleGrantedAuthority("ROLE_" + userInfo.getRoles().name()));
+        for (Role role : userInfo.getRoles()) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_" +role.getRoleName()));
+        }
 
         // 验证
         return new User(userInfo.getUsername(),

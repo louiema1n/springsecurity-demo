@@ -1,6 +1,7 @@
 package com.louiemain.springsecuritydemo.domain;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * @ClassName UserInfo
@@ -12,13 +13,6 @@ import javax.persistence.*;
 public class UserInfo {
 
     /**
-     * 角色枚举值
-     */
-    public enum Role {
-        admin, normal
-    }
-
-    /**
      * 自增主键
      */
     @Id
@@ -28,8 +22,10 @@ public class UserInfo {
     private String username;
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    private Role roles;
+    // 多对多，立即加载
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "UserRole", joinColumns = {@JoinColumn(name = "uid")}, inverseJoinColumns = {@JoinColumn(name = "role_id")})
+    private List<Role> roles;
 
     public long getUid() {
         return uid;
@@ -55,11 +51,11 @@ public class UserInfo {
         this.password = password;
     }
 
-    public Role getRoles() {
+    public List<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(Role roles) {
+    public void setRoles(List<Role> roles) {
         this.roles = roles;
     }
 }
